@@ -1,9 +1,13 @@
-﻿using ColossalFramework.UI;
+﻿using ColossalFramework;
+using ColossalFramework.UI;
 using ModTools.Console;
 using ModTools.Explorer;
 using ModTools.GamePanels;
 using ModTools.Scripting;
 using ModTools.UI;
+using System;
+using System.Collections.Generic;
+using UnifiedUI.Helpers;
 using UnityEngine;
 
 namespace ModTools
@@ -102,55 +106,78 @@ namespace ModTools
             modalUI = null;
         }
 
-        public void Update()
-        {
+        public void Update() {
             var middleButtonState = MouseButtonState.None;
-            if (Input.GetMouseButtonDown(2))
-            {
+            if (Input.GetMouseButtonDown(2)) {
                 middleButtonState = MouseButtonState.Pressed;
-            }
-            else if (Input.GetMouseButtonUp(2))
-            {
+            } else if (Input.GetMouseButtonUp(2)) {
                 middleButtonState = MouseButtonState.Released;
-            }
-            else if (Input.GetMouseButton(2))
-            {
+            } else if (Input.GetMouseButton(2)) {
                 middleButtonState = MouseButtonState.Held;
             }
 
             modalUI.Update(IsMouseOverWindow(), middleButtonState);
 
-            if (SettingsUI.ConsoleKey.IsKeyUp())
-            {
-                console.Visible = !console.Visible;
-            } 
-            else if (SettingsUI.MainWindowKey.IsKeyUp())
-            {
-                Visible = !Visible;
-            }
-            else if (SettingsUI.SceneExplorerKey.IsKeyUp())
-            {
-                SceneExplorer.Visible = !SceneExplorer.Visible;
-                if (SceneExplorer.Visible)
-                {
-                    SceneExplorer.RefreshSceneRoots();
-                }
-            }
-            else if (SettingsUI.DebugRendererKey.IsKeyUp())
-            {
-                if (!debugRenderer)
-                    debugRenderer = FindObjectOfType<UIView>().gameObject.AddComponent<DebugRenderer>();
-                debugRenderer.DrawDebugInfo = !debugRenderer.DrawDebugInfo;
-            }
-            else if (SettingsUI.WatchesKey.IsKeyUp())
-            {
-                Watches.Visible = !Watches.Visible;
-            }
-            else if (SettingsUI.ScriptEditorKey.IsKeyUp())
-            {
-                scriptEditor.Visible = !scriptEditor.Visible;
+            if (!LoadingExtension.Loaded) {
+                HandleHotKeys();
             }
         }
+
+        #region HotKeys
+        private void HandleHotKeys() {
+            if (SettingsUI.ConsoleKey.IsKeyUp()) {
+                ToggleConsole();
+            } else if (SettingsUI.MainWindowKey.IsKeyUp()) {
+                ToggleMainWindow();
+            } else if (SettingsUI.SceneExplorerKey.IsKeyUp()) {
+                ToggleSceneExplorer();
+            } else if (SettingsUI.DebugRendererKey.IsKeyUp()) {
+                ToggleDebugRenderer();
+            } else if (SettingsUI.WatchesKey.IsKeyUp()) {
+                ToggleWatches();
+            } else if (SettingsUI.ScriptEditorKey.IsKeyUp()) {
+                ToggleScriptEditor();
+            }
+        }
+
+        public void RegisterHotkeys() {
+            UUIHelpers.RegisterHotkeys(activationKey: SettingsUI.ConsoleKey, onToggle: ToggleConsole);
+            UUIHelpers.RegisterHotkeys(activationKey: SettingsUI.MainWindowKey, onToggle: ToggleMainWindow);
+            UUIHelpers.RegisterHotkeys(activationKey: SettingsUI.SceneExplorerKey, onToggle: ToggleSceneExplorer);
+            UUIHelpers.RegisterHotkeys(activationKey: SettingsUI.WatchesKey, onToggle: ToggleWatches);
+            UUIHelpers.RegisterHotkeys(activationKey: SettingsUI.ScriptEditorKey, onToggle: ToggleScriptEditor);
+
+            Dictionary<SavedInputKey, Func<bool>> InDebugRendererKeys = new Dictionary<SavedInputKey, Func<bool>>();
+            InDebugRendererKeys[SettingsUI.IterateComponentKey] = InDebugRenderer;
+            InDebugRendererKeys[SettingsUI.ShowComponentKey] = InDebugRenderer;
+            UUIHelpers.RegisterHotkeys(
+                activationKey: SettingsUI.DebugRendererKey,
+                onToggle: ToggleDebugRenderer,
+                activeKeys: InDebugRendererKeys);
+        }
+
+        private void ToggleConsole() => console.Visible = !console.Visible;
+
+        private void ToggleMainWindow() => Visible = !Visible;
+
+        private void ToggleWatches() => Watches.Visible = !Watches.Visible;
+
+        private void ToggleScriptEditor() => scriptEditor.Visible = !scriptEditor.Visible;
+
+        private void ToggleSceneExplorer() {
+            SceneExplorer.Visible = !SceneExplorer.Visible;
+            if (SceneExplorer.Visible) {
+                SceneExplorer.RefreshSceneRoots();
+            }
+        }
+
+        private void ToggleDebugRenderer() {
+            debugRenderer ??= FindObjectOfType<UIView>().gameObject.AddComponent<DebugRenderer>();
+            debugRenderer.DrawDebugInfo = !debugRenderer.DrawDebugInfo;
+        }
+
+        private bool InDebugRenderer() => debugRenderer?.DrawDebugInfo ?? false;
+        #endregion HotKeys
 
         protected override void OnWindowDestroyed()
         {

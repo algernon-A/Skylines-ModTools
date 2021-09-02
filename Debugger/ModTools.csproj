@@ -5,7 +5,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <CodeAnalysisRuleSet></CodeAnalysisRuleSet>
     <Deterministic>false</Deterministic>
-    <AssemblyVersion>3.5.3.*</AssemblyVersion>
+    <AssemblyVersion>3.6.0.*</AssemblyVersion>
     <FileAlignment>512</FileAlignment>
     <LangVersion>latest</LangVersion>
     <DebugType>full</DebugType>
@@ -44,8 +44,9 @@
     <Reference Include="Assembly-CSharp" />
     <Reference Include="ColossalManaged" />
     <Reference Include="ICities" />
+    <Reference Include="UnifiedUILib" />
     <Reference Include="UnityEngine" />
-    <Reference Include="ObjUnity3D" >
+    <Reference Include="ObjUnity3D">
       <Private>true</Private>
     </Reference>
   </ItemGroup>

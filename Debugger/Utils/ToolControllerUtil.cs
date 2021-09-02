@@ -6,7 +6,7 @@ namespace ModTools.Utils
 
     public static class ToolControllerUtil
     {
-        public static void AddExtraToolToController<T>(this ToolController toolController)
+        public static T AddExtraToolToController<T>(this ToolController toolController)
             where T : ToolBase
         {
             if (toolController == null)
@@ -26,6 +26,10 @@ namespace ModTools.Utils
             tools[initialLength] = tool;
 
             fieldInfo.SetValue(toolController, tools);
+
+            tool.enabled = false;
+
+            return tool;
         }
     }
 }

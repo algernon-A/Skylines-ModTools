@@ -1,14 +1,15 @@
-﻿using ColossalFramework;
-using ICities;
-using ModTools.Explorer;
-using ModTools.GamePanels;
-using ModTools.Utils;
-using UnityEngine;
+﻿namespace ModTools {
+    using ColossalFramework;
+    using ICities;
+    using ModTools.Explorer;
+    using ModTools.GamePanels;
+    using ModTools.Utils;
+    using UnityEngine;
 
-namespace ModTools
-{
     public sealed class LoadingExtension : LoadingExtensionBase
     {
+        public static bool Loaded { get; private set; }
+
         public override void OnCreated(ILoading loading)
         {
             base.OnCreated(loading);
@@ -38,23 +39,22 @@ namespace ModTools
                 modTools.gameObject.AddComponent<GamePanelExtension>();
             }
 
-            var selectionToolGo = new GameObject("SelectionToolControl");
-            selectionToolGo.transform.parent = GameObject.Find(ModToolsMod.ModToolsName).transform;
-            selectionToolGo.AddComponent<SelectionToolControl>();
+            SelectionTool.Create();
+
+            Loaded = true;
+
+            MainWindow.Instance.RegisterHotkeys();
         }
 
         public override void OnLevelUnloading()
         {
+            Loaded = false;
             var sceneExplorer = Object.FindObjectOfType<SceneExplorer>();
 
             sceneExplorer?.ClearExpanded();
             sceneExplorer?.ClearHistory();
 
-            var go = Object.FindObjectOfType<SelectionToolControl>();
-            if (go != null)
-            {
-                Object.Destroy(go);
-            }
+            SelectionTool.Release();
         }
 
         public override void OnReleased()
