@@ -5,6 +5,8 @@
     using ColossalFramework.UI;
 
     public static class UIScaler {
+        public static Matrix4x4 Mat0;
+
         static bool TryGetScreenResolution(out Vector2 resolution) {
             UIView uIView = UIView.GetAView();
             if (uIView) {
@@ -73,6 +75,13 @@
         }
 
         public static Matrix4x4 ScaleMatrix => Matrix4x4.Scale(Vector3.one * UIScaler.UIScale);
+
+        public static void ScaleGUIMatrix() {
+            Mat0 = GUI.matrix;
+            GUI.matrix = ScaleMatrix;
+        }
+
+        public static void RestoreGUIMatrix() => GUI.matrix = Mat0;
 
         public static Vector2 MousePosition
         {

@@ -166,7 +166,7 @@
             test if UnifiedUI is present and enable.
             </summary>
         </member>
-        <member name="M:UnifiedUI.Helpers.UUIHotKeys.AddInToolKeys(ColossalFramework.SavedInputKey)">
+        <member name="M:UnifiedUI.Helpers.UUIHotKeys.AddInToolKey(ColossalFramework.SavedInputKey)">
             <summary>
             add in-mod hotkey. this will take priority over (suppress) the activation key of other mods.
             when your mod is active.
@@ -693,10 +693,10 @@
             <summary>Provides access to the git information for the current assembly.</summary>
         </member>
         <member name="F:ThisAssembly.Git.IsDirty">
-            <summary>IsDirty: false</summary>
+            <summary>IsDirty: true</summary>
         </member>
         <member name="F:ThisAssembly.Git.IsDirtyString">
-            <summary>IsDirtyString: false</summary>
+            <summary>IsDirtyString: true</summary>
         </member>
         <member name="F:ThisAssembly.Git.RepositoryUrl">
             <summary>Repository URL: https://github.com/kianzarrin/UnifiedUI</summary>
@@ -705,46 +705,46 @@
             <summary>Branch: master</summary>
         </member>
         <member name="F:ThisAssembly.Git.Commit">
-            <summary>Commit: 03234fa</summary>
+            <summary>Commit: 6c005ae</summary>
         </member>
         <member name="F:ThisAssembly.Git.Sha">
-            <summary>Sha: 03234fa3849cbb3bafd627c5adcfd298600e2933</summary>
+            <summary>Sha: 6c005ae3a080da7d18d82e2dc8fb5b07a3f002b5</summary>
         </member>
         <member name="F:ThisAssembly.Git.CommitDate">
-            <summary>Commit date: 2021-09-02T19:59:17+03:00</summary>
+            <summary>Commit date: 2021-09-03T18:43:03+03:00</summary>
         </member>
         <member name="F:ThisAssembly.Git.Commits">
             <summary>Commits on top of base version: 0</summary>
         </member>
         <member name="F:ThisAssembly.Git.Tag">
-            <summary>Tag: V2.0.0.5</summary>
+            <summary>Tag: V2.1.1</summary>
         </member>
         <member name="F:ThisAssembly.Git.BaseTag">
-            <summary>Base tag: V2.0.0.5</summary>
+            <summary>Base tag: V2.1.1</summary>
         </member>
         <member name="T:ThisAssembly.Git.BaseVersion">
             <summary>Provides access to the base version information used to determine the <see cref="T:ThisAssembly.Git.SemVer" />.</summary>      
         </member>
         <member name="F:ThisAssembly.Git.BaseVersion.Major">
-            <summary>Major: 0</summary>
+            <summary>Major: 2</summary>
         </member>
         <member name="F:ThisAssembly.Git.BaseVersion.Minor">
-            <summary>Minor: 5</summary>
+            <summary>Minor: 1</summary>
         </member>
         <member name="F:ThisAssembly.Git.BaseVersion.Patch">
-            <summary>Patch: 0</summary>
+            <summary>Patch: 1</summary>
         </member>
         <member name="T:ThisAssembly.Git.SemVer">
             <summary>Provides access to SemVer information for the current assembly.</summary>
         </member>
         <member name="F:ThisAssembly.Git.SemVer.Major">
-            <summary>Major: 0</summary>
+            <summary>Major: 2</summary>
         </member>
         <member name="F:ThisAssembly.Git.SemVer.Minor">
-            <summary>Minor: 5</summary>
+            <summary>Minor: 1</summary>
         </member>
         <member name="F:ThisAssembly.Git.SemVer.Patch">
-            <summary>Patch: 0</summary>
+            <summary>Patch: 1</summary>
         </member>
         <member name="F:ThisAssembly.Git.SemVer.Label">
             <summary>Label: </summary>

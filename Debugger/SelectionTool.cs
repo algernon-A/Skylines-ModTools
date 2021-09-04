@@ -5,6 +5,7 @@ using ModTools.Explorer;
 using ModTools.Utils;
 using UnityEngine;
 using UnifiedUI.Helpers;
+using ModTools.UI;
 
 namespace ModTools
 {
@@ -19,6 +20,7 @@ namespace ModTools
         public override NetNode.Flags GetNodeIgnoreFlags() => NetNode.Flags.None;
 
         public static SelectionTool Create() {
+            Logger.Message("SelectionTool.Create");
             var toolController = FindObjectOfType<ToolManager>().m_properties;
             return toolController?.AddExtraToolToController<SelectionTool>();
         }
@@ -55,6 +57,7 @@ namespace ModTools
 
         protected override void Awake() {
             base.Awake();
+            Logger.Message("SelectionTool.Awake");
             var textureButton = AtlasUtil.LoadTextureFromAssembly("ModTools.SelectionToolButton.png");
             textureButton.name = "SelectionToolButton";
             var textureBar = AtlasUtil.LoadTextureFromAssembly("ModTools.SelectionToolBar.png");
@@ -87,7 +90,7 @@ namespace ModTools
                 tooltip: "ModTools Selection tool",
                 tool: this,
                 icon: textureButton,
-                hotkeys: new UUIHotKeys { ActicationKey = UI.SettingsUI.SelectionToolKey });
+                hotkeys: new UUIHotKeys { ActivationKey = UI.SettingsUI.SelectionToolKey });
         }
 
         protected override void OnDestroy() {
@@ -420,6 +423,7 @@ namespace ModTools
 
         private void DrawLabel()
         {
+            UIScaler.ScaleGUIMatrix();
             var hoverInstance1 = m_hoverInstance;
             var text = (string)null;
 
@@ -473,12 +477,12 @@ namespace ModTools
                 return;
             }
 
-            var screenPoint = Input.mousePosition;
-            screenPoint.y = Screen.height - screenPoint.y;
+            var screenPoint = UIScaler.MousePosition;
             var color = GUI.color;
             GUI.color = Color.white;
             DeveloperUI.LabelOutline(new Rect(screenPoint.x, screenPoint.y, 500f, 500f), text, Color.black, Color.cyan, GUI.skin.label, 2f);
             GUI.color = color;
+            UIScaler.RestoreGUIMatrix();
         }
 
         protected override void OnToolUpdate()
