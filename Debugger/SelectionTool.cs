@@ -121,19 +121,22 @@ namespace ModTools
         }
 
         protected override void OnDisable() {
+            m_toolController ??= ToolsModifierControl.toolController; // workaround exception in base code.
             base.OnDisable();
             ValueAnimator.Animate(
                 "BulldozerBar",
                 val => {
-                    var relativePosition = bar_.relativePosition;
-                    relativePosition.y = val;
-                    bar_.relativePosition = relativePosition;
+                    if(bar_ is not null) {
+                        var relativePosition = bar_.relativePosition;
+                        relativePosition.y = val;
+                        bar_.relativePosition = relativePosition;
+                    }
                 },
                 new AnimatedFloat(
                     fullscreenContainer_.relativePosition.y + fullscreenContainer_.size.y - bar_.size.y,
                     fullscreenContainer_.relativePosition.y + fullscreenContainer_.size.y,
                     0.3f),
-                () => bar_.Hide());
+                () => bar_?.Hide());
 
             ToolsModifierControl.SetTool<DefaultTool>();
         }

@@ -5,7 +5,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <CodeAnalysisRuleSet></CodeAnalysisRuleSet>
     <Deterministic>false</Deterministic>
-    <AssemblyVersion>3.6.1.*</AssemblyVersion>
+    <AssemblyVersion>3.6.2.*</AssemblyVersion>
     <FileAlignment>512</FileAlignment>
     <LangVersion>latest</LangVersion>
     <DebugType>full</DebugType>
@@ -71,6 +71,9 @@
     <None Update="lib\UnifiedUILib.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="PreviewImage.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Target Name="DeployToModDirectory" AfterTargets="Build">
     <Message Importance="high" Text="DeployToModDirectory ..." />
@@ -78,7 +81,7 @@
       <Output TaskParameter="Assemblies" ItemName="Targets" />
     </GetAssemblyIdentity>
     <ItemGroup>
-      <AuxiliaryFiles Include="$(TargetPath).mdb;$(TargetDir)ObjUnity3D.dll;$(TargetDir)UnifiedUILib.dll" />
+      <AuxiliaryFiles Include="$(TargetPath).mdb;$(TargetDir)ObjUnity3D.dll;$(TargetDir)UnifiedUILib.dll;*.png" />
       <VersionNumber Include="@(Targets->'%(Version)')" />
     </ItemGroup>
     <PropertyGroup>
@@ -103,7 +106,7 @@
   </Target>
   <Target Name="DeployToWorkshop" AfterTargets="DeployToModDirectory" Condition="'$(ContentID)'!=''">
     <ItemGroup>
-      <FilesToDelete Include="$(ContentPath)/*.*" Exclude="$(ContentPath)/PreviewImage.png" />
+      <FilesToDelete Include="$(ContentPath)/*.*" />
       <FilesToCopy Include="$(DeployDir)/*.*" />
     </ItemGroup>
     <Delete Files="@(FilesToDelete)" />
