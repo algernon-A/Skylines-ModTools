@@ -116,9 +116,10 @@ namespace ModTools
                 middleButtonState = MouseButtonState.Held;
             }
 
-            modalUI.Update(IsMouseOverWindow(), middleButtonState);
+            bool mouseOverAWindow = IsMouseOverAWindow();
+            modalUI.Update(mouseOverAWindow, middleButtonState);
 
-            if (!LoadingExtension.Loaded) {
+            if (!LoadingExtension.Loaded || mouseOverAWindow /* workaround: when mouse is over a window UUI update is not exected. */) {
                 HandleHotKeys();
             }
         }

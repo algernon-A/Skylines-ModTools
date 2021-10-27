@@ -214,10 +214,18 @@ namespace ModTools.UI
 
         public void MoveResize(Rect newWindowRect) => windowRect = newWindowRect;
 
-        protected static bool IsMouseOverWindow()
+        protected static bool IsMouseOverAWindow()
         {
-            var mouse = UIScaler.MousePosition;
-            return Windows.FindIndex(window => window.Visible && window.windowRect.Contains(mouse)) >= 0;
+            Vector2? mouse = null;
+            foreach (var window in Windows) {
+                if (window.Visible) {
+                    mouse ??= UIScaler.MousePosition;
+                    if (window.windowRect.Contains(mouse.Value))
+                        return true;
+                }
+            }
+
+            return false;
         }
 
         protected abstract void DrawWindow();

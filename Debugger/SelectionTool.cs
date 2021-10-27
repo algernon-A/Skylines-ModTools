@@ -90,7 +90,7 @@ namespace ModTools
                 tooltip: "ModTools Selection tool",
                 tool: this,
                 icon: textureButton,
-                hotkeys: new UUIHotKeys { ActivationKey = UI.SettingsUI.SelectionToolKey });
+                hotkeys: new UUIHotKeys { ActivationKey = SettingsUI.SelectionToolKey });
         }
 
         protected override void OnDestroy() {

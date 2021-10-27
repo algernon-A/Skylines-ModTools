@@ -4,7 +4,9 @@
     using ModTools.Explorer;
     using ModTools.GamePanels;
     using ModTools.Utils;
+    using System;
     using UnityEngine;
+    using Object = UnityEngine.Object;
 
     public sealed class LoadingExtension : LoadingExtensionBase
     {
@@ -25,25 +27,27 @@
 
         public static void Load()
         {
-            CustomPrefabs.Bootstrap();
-            var appMode = Singleton<ToolManager>.instance.m_properties.m_mode;
-            var modTools = MainWindow.Instance;
-            if (modTools == null)
-            {
-                Debug.LogError("ModTools instance wasn't present");
-                return;
+            try {
+                CustomPrefabs.Bootstrap();
+                var appMode = Singleton<ToolManager>.instance.m_properties.m_mode;
+                var modTools = MainWindow.Instance;
+                if(modTools == null) {
+                    Debug.LogError("ModTools instance wasn't present");
+                    return;
+                }
+
+                if(modTools.Config.ExtendGamePanels && appMode == ItemClass.Availability.Game) {
+                    modTools.gameObject.AddComponent<GamePanelExtension>();
+                }
+
+                SelectionTool.Create();
+
+                Loaded = true;
+
+                MainWindow.Instance.RegisterHotkeys();
+            } catch(Exception ex) {
+                Logger.Exception(ex);
             }
-
-            if (modTools.Config.ExtendGamePanels && appMode == ItemClass.Availability.Game)
-            {
-                modTools.gameObject.AddComponent<GamePanelExtension>();
-            }
-
-            SelectionTool.Create();
-
-            Loaded = true;
-
-            MainWindow.Instance.RegisterHotkeys();
         }
 
         public override void OnLevelUnloading()
