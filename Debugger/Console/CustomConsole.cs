@@ -94,17 +94,12 @@ namespace ModTools.Scripting
             }
         }
 
-        public void Update()
-        {
-            if (vanillaPanel == null)
-            {
-                var panel = UIView.library?.Get<DebugOutputPanel>("DebugOutputPanel");
-                if (panel == null)
-                {
+        public void Update() {
+            if(!vanillaPanel) {
+                vanillaPanel = UIView.library?.Get<DebugOutputPanel>("DebugOutputPanel");
+                if(!vanillaPanel)
                     return;
-                }
 
-                vanillaPanel = panel;
                 oldVanillaPanelParent = vanillaPanel.transform.parent;
                 vanillaPanel.transform.parent = transform;
             }

@@ -1,17 +1,17 @@
-﻿using ColossalFramework;
-using ColossalFramework.UI;
-using ModTools.Console;
-using ModTools.Explorer;
-using ModTools.GamePanels;
-using ModTools.Scripting;
-using ModTools.UI;
-using System;
-using System.Collections.Generic;
-using UnifiedUI.Helpers;
-using UnityEngine;
-
-namespace ModTools
+﻿namespace ModTools
 {
+    using System;
+    using System.Collections.Generic;
+    using ColossalFramework;
+    using ColossalFramework.UI;
+    using ModTools.Console;
+    using ModTools.Explorer;
+    using ModTools.GamePanels;
+    using ModTools.Scripting;
+    using ModTools.UI;
+    using UnifiedUI.Helpers;
+    using UnityEngine;
+
     internal sealed class MainWindow : GUIWindow, IGameObject
     {
         private const string ConfigPath = "ModToolsConfig.xml";
@@ -31,20 +31,11 @@ namespace ModTools
         public MainWindow()
             : base("Mod Tools " + ModToolsMod.Version, new Rect(128, 128, 356, 340), resizable: false)
         {
+            instance = this;
         }
 
         // TODO: remove the singleton
-        public static MainWindow Instance
-        {
-            get
-            {
-                lock (InstanceLock)
-                {
-                    instance ??= FindObjectOfType<MainWindow>();
-                    return instance;
-                }
-            }
-        }
+        public static MainWindow Instance => instance;
 
         // TODO: refactor the configuration access
         public ModConfiguration Config { get; set; } = new ModConfiguration();

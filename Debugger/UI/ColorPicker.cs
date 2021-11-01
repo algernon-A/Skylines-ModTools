@@ -80,6 +80,8 @@ namespace ModTools.UI
         public void Update()
         {
             try {
+                if(!Visible) return;
+
                 Vector2 mouse = UIScaler.MousePosition;
 
                 if (Input.GetMouseButton(0)) {

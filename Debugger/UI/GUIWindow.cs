@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = System.Random;
 
 namespace ModTools.UI
 {
     internal abstract class GUIWindow : MonoBehaviour, IDestroyableObject, IUIObject
     {
+        private static Random idGenerator_ = new Random();
+
         private static readonly List<GUIWindow> Windows = new List<GUIWindow>();
 
         private static GUIWindow resizingWindow;
@@ -36,7 +39,7 @@ namespace ModTools.UI
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811", Justification = ".ctor of a Unity component")]
         protected GUIWindow(string title, Rect rect, bool resizable = true, bool hasTitlebar = true)
         {
-            id = UnityEngine.Random.Range(1024, int.MaxValue);
+            id = idGenerator_.Next(1024, int.MaxValue);
             Title = title;
             windowRect = rect;
             this.resizable = resizable;
