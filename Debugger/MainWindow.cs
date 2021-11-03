@@ -117,6 +117,10 @@
 
         #region HotKeys
         private void HandleHotKeys() {
+            if(FrameVisbleChanged == Time.frameCount) { 
+                // prevent double trigger
+                return;
+            }
             if (SettingsUI.ConsoleKey.IsKeyUp()) {
                 ToggleConsole();
             } else if (SettingsUI.MainWindowKey.IsKeyUp()) {

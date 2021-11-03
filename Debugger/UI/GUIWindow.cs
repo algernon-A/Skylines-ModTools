@@ -50,12 +50,15 @@ namespace ModTools.UI
 
         public Rect WindowRect => windowRect;
 
+        public static int FrameVisbleChanged; // avoid double trigger.
+
         public bool Visible
         {
             get => visible;
 
             set
             {
+                FrameVisbleChanged = Time.frameCount;
                 var wasVisible = visible;
                 visible = value;
                 if (visible && !wasVisible)
