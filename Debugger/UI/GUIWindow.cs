@@ -50,7 +50,7 @@ namespace ModTools.UI
 
         public Rect WindowRect => windowRect;
 
-        public static int FrameVisbleChanged; // avoid double trigger.
+        public static int FrameVisbleChanged;
 
         public bool Visible
         {

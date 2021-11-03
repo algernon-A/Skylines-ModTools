@@ -118,7 +118,7 @@
         #region HotKeys
         private void HandleHotKeys() {
             if(FrameVisbleChanged == Time.frameCount) { 
-                // prevent double trigger
+                // prevent double trigger by UUI when mouse is at the place window will be visible.
                 return;
             }
             if (SettingsUI.ConsoleKey.IsKeyUp()) {
