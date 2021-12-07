@@ -152,7 +152,9 @@
                 activeKeys: InDebugRendererKeys);
         }
 
-        private void ToggleConsole() => console.Visible = !console.Visible;
+        private void ToggleConsole() {
+            if (console) console.Visible = !console.Visible;
+        }
 
         private void ToggleMainWindow() => Visible = !Visible;
 
