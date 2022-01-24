@@ -5,7 +5,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <CodeAnalysisRuleSet></CodeAnalysisRuleSet>
     <Deterministic>false</Deterministic>
-    <AssemblyVersion>3.5.2.*</AssemblyVersion>
+    <AssemblyVersion>3.6.7.*</AssemblyVersion>
     <FileAlignment>512</FileAlignment>
     <LangVersion>latest</LangVersion>
     <DebugType>full</DebugType>
@@ -44,8 +44,9 @@
     <Reference Include="Assembly-CSharp" />
     <Reference Include="ColossalManaged" />
     <Reference Include="ICities" />
+    <Reference Include="UnifiedUILib" />
     <Reference Include="UnityEngine" />
-    <Reference Include="ObjUnity3D" >
+    <Reference Include="ObjUnity3D">
       <Private>true</Private>
     </Reference>
   </ItemGroup>
@@ -66,13 +67,21 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Update="lib\UnifiedUILib.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="PreviewImage.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <Target Name="DeployToModDirectory" AfterTargets="Build">
     <Message Importance="high" Text="DeployToModDirectory ..." />
     <GetAssemblyIdentity AssemblyFiles="$(TargetPath)">
       <Output TaskParameter="Assemblies" ItemName="Targets" />
     </GetAssemblyIdentity>
     <ItemGroup>
-      <AuxiliaryFiles Include="$(TargetPath).mdb;$(TargetDir)ObjUnity3D.dll" />
+      <AuxiliaryFiles Include="$(TargetPath).mdb;$(TargetDir)ObjUnity3D.dll;$(TargetDir)UnifiedUILib.dll;PreviewImage.png" />
       <VersionNumber Include="@(Targets->'%(Version)')" />
     </ItemGroup>
     <PropertyGroup>
@@ -97,10 +106,9 @@
   </Target>
   <Target Name="DeployToWorkshop" AfterTargets="DeployToModDirectory" Condition="'$(ContentID)'!=''">
     <ItemGroup>
-      <FilesToDelete Include="$(ContentPath)/*.*" Exclude="$(ContentPath)/PreviewImage.png" />
       <FilesToCopy Include="$(DeployDir)/*.*" />
     </ItemGroup>
-    <Delete Files="@(FilesToDelete)" />
+    <RemoveDir Directories="$(ContentPath)" />
     <Copy SourceFiles="@(FilesToCopy)" DestinationFolder="$(ContentPath)" />
     <RemoveDir Directories="$(DeployDir)" />
     <Message Importance="high" Text="Moved to $(ContentPath)" />

@@ -82,7 +82,7 @@ namespace ModTools
 #endif
 
             // hot unload
-            UnityEngine.Object.Destroy(UnityEngine.Object.FindObjectOfType<SelectionToolControl>());
+            SelectionTool.Release();
         }
 
         public void OnSettingsUI(UIHelper helper) => SettingsUI.OnSettingsUI(helper);

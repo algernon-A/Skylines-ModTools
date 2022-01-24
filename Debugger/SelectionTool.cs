@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
+using ColossalFramework;
 using ColossalFramework.UI;
 using ModTools.Explorer;
 using ModTools.Utils;
 using UnityEngine;
+using UnifiedUI.Helpers;
+using ModTools.UI;
 
 namespace ModTools
 {
@@ -10,8 +13,21 @@ namespace ModTools
     {
         private ushort hoveredSegment;
         private ushort hoveredBuilding;
+        private UITiledSprite bar_;
+        private UIComponent button_;
+        private UIComponent fullscreenContainer_;
 
         public override NetNode.Flags GetNodeIgnoreFlags() => NetNode.Flags.None;
+
+        public static SelectionTool Create() {
+            Logger.Message("SelectionTool.Create");
+            var toolController = FindObjectOfType<ToolManager>().m_properties;
+            return toolController?.AddExtraToolToController<SelectionTool>();
+        }
+
+        public static void Release() {
+            Destroy(FindObjectOfType<SelectionTool>());
+        }
 
         public override NetSegment.Flags GetSegmentIgnoreFlags(out bool nameOnly)
         {
@@ -38,6 +54,92 @@ namespace ModTools
         public override DistrictPark.Flags GetParkIgnoreFlags() => DistrictPark.Flags.None;
 
         public override DisasterData.Flags GetDisasterIgnoreFlags() => DisasterData.Flags.None;
+
+        protected override void Awake() {
+            base.Awake();
+            Logger.Message("SelectionTool.Awake");
+            var textureButton = AtlasUtil.LoadTextureFromAssembly("ModTools.SelectionToolButton.png");
+            textureButton.name = "SelectionToolButton";
+            var textureBar = AtlasUtil.LoadTextureFromAssembly("ModTools.SelectionToolBar.png");
+            textureBar.name = "SelectionToolBar";
+
+            var atlas = AtlasUtil.CreateAtlas(new[]
+                {
+                    textureButton,
+                    textureBar,
+                });
+
+            fullscreenContainer_ = UIView.Find("FullScreenContainer");
+
+            var barGo = new GameObject("SelectionToolBar");
+            bar_ = barGo.AddComponent<UITiledSprite>();
+            UIView.GetAView().AttachUIComponent(barGo);
+            bar_.atlas = atlas;
+            bar_.width = UIView.GetAView().fixedWidth;
+            var relativePosition = bar_.relativePosition;
+            relativePosition.x = 0;
+            bar_.relativePosition = relativePosition;
+            bar_.height = 28;
+            bar_.zOrder = 18;
+            bar_.spriteName = "SelectionToolBar";
+            bar_.Hide();
+
+            button_ = UUIHelpers.RegisterToolButton(
+                name: "ModTools Selection tool",
+                groupName: null,
+                tooltip: "ModTools Selection tool",
+                tool: this,
+                icon: textureButton,
+                hotkeys: new UUIHotKeys { ActivationKey = SettingsUI.SelectionToolKey });
+        }
+
+        protected override void OnDestroy() {
+            Destroy(button_.gameObject);
+            button_ = null;
+            Destroy(bar_.gameObject);
+            bar_ = null;
+            fullscreenContainer_ = null;
+            base.OnDestroy();
+        }
+
+        protected override void OnEnable() {
+            base.OnEnable();
+            ToolsModifierControl.mainToolbar.CloseEverything();
+            ToolsModifierControl.SetTool<SelectionTool>();
+            bar_.Show();
+            ValueAnimator.Animate(
+                "BulldozerBar",
+                val => {
+                    var relativePosition = bar_.relativePosition;
+                    relativePosition.y = val;
+                    bar_.relativePosition = relativePosition;
+                },
+                new AnimatedFloat(
+                    fullscreenContainer_.relativePosition.y + fullscreenContainer_.size.y,
+                    fullscreenContainer_.relativePosition.y + fullscreenContainer_.size.y - bar_.size.y,
+                    0.3f));
+        }
+
+        protected override void OnDisable() {
+            m_toolController ??= ToolsModifierControl.toolController; // workaround exception in base code.
+            base.OnDisable();
+            ValueAnimator.Animate(
+                "BulldozerBar",
+                val => {
+                    if(bar_ is not null) {
+                        var relativePosition = bar_.relativePosition;
+                        relativePosition.y = val;
+                        bar_.relativePosition = relativePosition;
+                    }
+                },
+                new AnimatedFloat(
+                    fullscreenContainer_.relativePosition.y + fullscreenContainer_.size.y - bar_.size.y,
+                    fullscreenContainer_.relativePosition.y + fullscreenContainer_.size.y,
+                    0.3f),
+                () => bar_?.Hide());
+
+            ToolsModifierControl.SetTool<DefaultTool>();
+        }
 
         public override void RenderOverlay(RenderManager.CameraInfo cameraInfo)
         {
@@ -324,6 +426,7 @@ namespace ModTools
 
         private void DrawLabel()
         {
+            UIScaler.ScaleGUIMatrix();
             var hoverInstance1 = m_hoverInstance;
             var text = (string)null;
 
@@ -377,12 +480,12 @@ namespace ModTools
                 return;
             }
 
-            var screenPoint = Input.mousePosition;
-            screenPoint.y = Screen.height - screenPoint.y;
+            var screenPoint = UIScaler.MousePosition;
             var color = GUI.color;
             GUI.color = Color.white;
             DeveloperUI.LabelOutline(new Rect(screenPoint.x, screenPoint.y, 500f, 500f), text, Color.black, Color.cyan, GUI.skin.label, 2f);
             GUI.color = color;
+            UIScaler.RestoreGUIMatrix();
         }
 
         protected override void OnToolUpdate()

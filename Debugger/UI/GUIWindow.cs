@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = System.Random;
 
 namespace ModTools.UI
 {
     internal abstract class GUIWindow : MonoBehaviour, IDestroyableObject, IUIObject
     {
+        private static Random idGenerator_ = new Random();
+
         private static readonly List<GUIWindow> Windows = new List<GUIWindow>();
 
         private static GUIWindow resizingWindow;
@@ -36,7 +39,7 @@ namespace ModTools.UI
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811", Justification = ".ctor of a Unity component")]
         protected GUIWindow(string title, Rect rect, bool resizable = true, bool hasTitlebar = true)
         {
-            id = UnityEngine.Random.Range(1024, int.MaxValue);
+            id = idGenerator_.Next(1024, int.MaxValue);
             Title = title;
             windowRect = rect;
             this.resizable = resizable;
@@ -47,12 +50,15 @@ namespace ModTools.UI
 
         public Rect WindowRect => windowRect;
 
+        public static int FrameVisbleChanged;
+
         public bool Visible
         {
             get => visible;
 
             set
             {
+                FrameVisbleChanged = Time.frameCount;
                 var wasVisible = visible;
                 visible = value;
                 if (visible && !wasVisible)
@@ -100,97 +106,99 @@ namespace ModTools.UI
         }
 
         public void OnGUI() {
-            if (skin == null) {
-                BgTexture = new Texture2D(1, 1);
-                BgTexture.SetPixel(0, 0, Config.BackgroundColor);
-                BgTexture.Apply();
+            try {
+                if (skin == null) {
+                    BgTexture = new Texture2D(1, 1);
+                    BgTexture.SetPixel(0, 0, Config.BackgroundColor);
+                    BgTexture.Apply();
 
-                ResizeNormalTexture = new Texture2D(1, 1);
-                ResizeNormalTexture.SetPixel(0, 0, Color.white);
-                ResizeNormalTexture.Apply();
+                    ResizeNormalTexture = new Texture2D(1, 1);
+                    ResizeNormalTexture.SetPixel(0, 0, Color.white);
+                    ResizeNormalTexture.Apply();
 
-                ResizeHoverTexture = new Texture2D(1, 1);
-                ResizeHoverTexture.SetPixel(0, 0, Color.blue);
-                ResizeHoverTexture.Apply();
+                    ResizeHoverTexture = new Texture2D(1, 1);
+                    ResizeHoverTexture.SetPixel(0, 0, Color.blue);
+                    ResizeHoverTexture.Apply();
 
-                CloseNormalTexture = new Texture2D(1, 1);
-                CloseNormalTexture.SetPixel(0, 0, Color.red);
-                CloseNormalTexture.Apply();
+                    CloseNormalTexture = new Texture2D(1, 1);
+                    CloseNormalTexture.SetPixel(0, 0, Color.red);
+                    CloseNormalTexture.Apply();
 
-                CloseHoverTexture = new Texture2D(1, 1);
-                CloseHoverTexture.SetPixel(0, 0, Color.white);
-                CloseHoverTexture.Apply();
+                    CloseHoverTexture = new Texture2D(1, 1);
+                    CloseHoverTexture.SetPixel(0, 0, Color.white);
+                    CloseHoverTexture.Apply();
 
-                MoveNormalTexture = new Texture2D(1, 1);
-                MoveNormalTexture.SetPixel(0, 0, Config.TitleBarColor);
-                MoveNormalTexture.Apply();
+                    MoveNormalTexture = new Texture2D(1, 1);
+                    MoveNormalTexture.SetPixel(0, 0, Config.TitleBarColor);
+                    MoveNormalTexture.Apply();
 
-                MoveHoverTexture = new Texture2D(1, 1);
-                MoveHoverTexture.SetPixel(0, 0, Config.TitleBarColor * 1.2f);
-                MoveHoverTexture.Apply();
+                    MoveHoverTexture = new Texture2D(1, 1);
+                    MoveHoverTexture.SetPixel(0, 0, Config.TitleBarColor * 1.2f);
+                    MoveHoverTexture.Apply();
 
-                skin = ScriptableObject.CreateInstance<GUISkin>();
-                skin.box = new GUIStyle(GUI.skin.box);
-                skin.button = new GUIStyle(GUI.skin.button);
-                skin.horizontalScrollbar = new GUIStyle(GUI.skin.horizontalScrollbar);
-                skin.horizontalScrollbarLeftButton = new GUIStyle(GUI.skin.horizontalScrollbarLeftButton);
-                skin.horizontalScrollbarRightButton = new GUIStyle(GUI.skin.horizontalScrollbarRightButton);
-                skin.horizontalScrollbarThumb = new GUIStyle(GUI.skin.horizontalScrollbarThumb);
-                skin.horizontalSlider = new GUIStyle(GUI.skin.horizontalSlider);
-                skin.horizontalSliderThumb = new GUIStyle(GUI.skin.horizontalSliderThumb);
-                skin.label = new GUIStyle(GUI.skin.label);
-                skin.scrollView = new GUIStyle(GUI.skin.scrollView);
-                skin.textArea = new GUIStyle(GUI.skin.textArea);
-                skin.textField = new GUIStyle(GUI.skin.textField);
-                skin.toggle = new GUIStyle(GUI.skin.toggle);
-                skin.verticalScrollbar = new GUIStyle(GUI.skin.verticalScrollbar);
-                skin.verticalScrollbarDownButton = new GUIStyle(GUI.skin.verticalScrollbarDownButton);
-                skin.verticalScrollbarThumb = new GUIStyle(GUI.skin.verticalScrollbarThumb);
-                skin.verticalScrollbarUpButton = new GUIStyle(GUI.skin.verticalScrollbarUpButton);
-                skin.verticalSlider = new GUIStyle(GUI.skin.verticalSlider);
-                skin.verticalSliderThumb = new GUIStyle(GUI.skin.verticalSliderThumb);
-                skin.window = new GUIStyle(GUI.skin.window);
-                skin.window.normal.background = BgTexture;
-                skin.window.onNormal.background = BgTexture;
+                    skin = ScriptableObject.CreateInstance<GUISkin>();
+                    skin.box = new GUIStyle(GUI.skin.box);
+                    skin.button = new GUIStyle(GUI.skin.button);
+                    skin.horizontalScrollbar = new GUIStyle(GUI.skin.horizontalScrollbar);
+                    skin.horizontalScrollbarLeftButton = new GUIStyle(GUI.skin.horizontalScrollbarLeftButton);
+                    skin.horizontalScrollbarRightButton = new GUIStyle(GUI.skin.horizontalScrollbarRightButton);
+                    skin.horizontalScrollbarThumb = new GUIStyle(GUI.skin.horizontalScrollbarThumb);
+                    skin.horizontalSlider = new GUIStyle(GUI.skin.horizontalSlider);
+                    skin.horizontalSliderThumb = new GUIStyle(GUI.skin.horizontalSliderThumb);
+                    skin.label = new GUIStyle(GUI.skin.label);
+                    skin.scrollView = new GUIStyle(GUI.skin.scrollView);
+                    skin.textArea = new GUIStyle(GUI.skin.textArea);
+                    skin.textField = new GUIStyle(GUI.skin.textField);
+                    skin.toggle = new GUIStyle(GUI.skin.toggle);
+                    skin.verticalScrollbar = new GUIStyle(GUI.skin.verticalScrollbar);
+                    skin.verticalScrollbarDownButton = new GUIStyle(GUI.skin.verticalScrollbarDownButton);
+                    skin.verticalScrollbarThumb = new GUIStyle(GUI.skin.verticalScrollbarThumb);
+                    skin.verticalScrollbarUpButton = new GUIStyle(GUI.skin.verticalScrollbarUpButton);
+                    skin.verticalSlider = new GUIStyle(GUI.skin.verticalSlider);
+                    skin.verticalSliderThumb = new GUIStyle(GUI.skin.verticalSliderThumb);
+                    skin.window = new GUIStyle(GUI.skin.window);
+                    skin.window.normal.background = BgTexture;
+                    skin.window.onNormal.background = BgTexture;
 
-                skin.settings.cursorColor = GUI.skin.settings.cursorColor;
-                skin.settings.cursorFlashSpeed = GUI.skin.settings.cursorFlashSpeed;
-                skin.settings.doubleClickSelectsWord = GUI.skin.settings.doubleClickSelectsWord;
-                skin.settings.selectionColor = GUI.skin.settings.selectionColor;
-                skin.settings.tripleClickSelectsLine = GUI.skin.settings.tripleClickSelectsLine;
+                    skin.settings.cursorColor = GUI.skin.settings.cursorColor;
+                    skin.settings.cursorFlashSpeed = GUI.skin.settings.cursorFlashSpeed;
+                    skin.settings.doubleClickSelectsWord = GUI.skin.settings.doubleClickSelectsWord;
+                    skin.settings.selectionColor = GUI.skin.settings.selectionColor;
+                    skin.settings.tripleClickSelectsLine = GUI.skin.settings.tripleClickSelectsLine;
 
-                highlightstyle = new GUIStyle(GUI.skin.button);
-                highlightstyle.margin = new RectOffset(0, 0, 0, 0);
-                highlightstyle.padding = new RectOffset(0, 0, 0, 0);
-                highlightstyle.normal = highlightstyle.onNormal = new GUIStyleState();
-                LoadHighlightTexture();
-                highlightstyle.onHover = highlightstyle.hover = new GUIStyleState {
-                    background = highlightTexture,
-                };
+                    highlightstyle = new GUIStyle(GUI.skin.button);
+                    highlightstyle.margin = new RectOffset(0, 0, 0, 0);
+                    highlightstyle.padding = new RectOffset(0, 0, 0, 0);
+                    highlightstyle.normal = highlightstyle.onNormal = new GUIStyleState();
+                    LoadHighlightTexture();
+                    highlightstyle.onHover = highlightstyle.hover = new GUIStyleState {
+                        background = highlightTexture,
+                    };
+                }
+
+                if (!Visible) {
+                    return;
+                }
+
+                var oldSkin = GUI.skin;
+                if (skin != null) {
+                    UpdateFont();
+                    GUI.skin = skin;
+                }
+
+                var oldMatrix = GUI.matrix;
+                GUI.matrix = UIScaler.ScaleMatrix;
+
+                windowRect = GUI.Window(id, windowRect, WindowFunction, string.Empty);
+
+                OnWindowDrawn();
+
+                GUI.matrix = oldMatrix;
+
+                GUI.skin = oldSkin;
+            } catch (Exception ex) {
+                Logger.Exception(ex);
             }
-
-            if (!Visible)
-            {
-                return;
-            }
-
-            var oldSkin = GUI.skin;
-            if (skin != null)
-            {
-                UpdateFont();
-                GUI.skin = skin;
-            }
-
-            var oldMatrix = GUI.matrix;
-            GUI.matrix = UIScaler.ScaleMatrix;
-
-            windowRect = GUI.Window(id, windowRect, WindowFunction, string.Empty);
-
-            OnWindowDrawn();
-
-            GUI.matrix = oldMatrix;
-
-            GUI.skin = oldSkin;
         }
 
         internal static Texture2D LoadHighlightTexture()
@@ -212,10 +220,18 @@ namespace ModTools.UI
 
         public void MoveResize(Rect newWindowRect) => windowRect = newWindowRect;
 
-        protected static bool IsMouseOverWindow()
+        protected static bool IsMouseOverAWindow()
         {
-            var mouse = UIScaler.MousePosition;
-            return Windows.FindIndex(window => window.Visible && window.windowRect.Contains(mouse)) >= 0;
+            Vector2? mouse = null;
+            foreach (var window in Windows) {
+                if (window.Visible) {
+                    mouse ??= UIScaler.MousePosition;
+                    if (window.windowRect.Contains(mouse.Value))
+                        return true;
+                }
+            }
+
+            return false;
         }
 
         protected abstract void DrawWindow();
@@ -250,35 +266,30 @@ namespace ModTools.UI
 
         private void WindowFunction(int windowId)
         {
-            FitScreen();
-            GUILayout.Space(8.0f);
+            try {
+                FitScreen();
+                GUILayout.Space(8.0f);
 
-            try
-            {
                 DrawWindow();
+
+                GUILayout.Space(16.0f);
+
+                var mouse = UIScaler.MousePosition;
+
+                DrawBorder();
+
+                if (hasTitlebar) {
+                    DrawTitlebar(mouse);
+                    DrawCloseButton(mouse);
+                }
+
+                if (resizable) {
+                    DrawResizeHandle(mouse);
+                }
+            } catch(Exception ex) {
+                Logger.Exception(ex);
             }
-            catch (Exception ex)
-            {
-                HandleException(ex);
-            }
-
-            GUILayout.Space(16.0f);
-
-            var mouse = UIScaler.MousePosition;
-
-            DrawBorder();
-
-            if (hasTitlebar)
-            {
-                DrawTitlebar(mouse);
-                DrawCloseButton(mouse);
-            }
-
-            if (resizable)
-            {
-                DrawResizeHandle(mouse);
-            }
-        }
+    }
 
         private void DrawBorder()
         {

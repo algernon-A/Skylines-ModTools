@@ -171,21 +171,15 @@
 
             if (hoveredComponent != null)
             {
-                var coords = mouse;
-
+                UIScaler.ScaleGUIMatrix();
+                var coords = UIScaler.MousePosition;
                 var size = new Vector2(300.0f, 300.0f);
 
-                if (coords.x + size.x >= Screen.width)
-                {
-                    coords.x = Screen.width - size.x;
-                }
-
-                if (coords.y + size.y >= Screen.height)
-                {
-                    coords.y = Screen.height - size.y;
-                }
-
+                coords.x = Mathf.Clamp(coords.x, 0, UIScaler.MaxWidth - size.x);
+                coords.y = Mathf.Clamp(coords.y, 0, UIScaler.MaxHeight - size.y);
                 GUI.Window(81871, new Rect(coords.x, coords.y, size.x, size.y), DoInfoWindow, string.Empty, infoWindowStyle);
+
+                UIScaler.RestoreGUIMatrix();
             }
         }
 

@@ -4,14 +4,17 @@ using UnityEngine;
 
 namespace ModTools
 {
-    internal sealed class AppearanceConfig : GUIWindow
+    internal sealed class AppearanceConfig : GUIWindow, IAwakingObject
     {
-        private readonly string[] availableFonts;
+        private string[] availableFonts;
         private int selectedFont;
 
         public AppearanceConfig()
             : base("Appearance configuration", new Rect(16.0f, 16.0f, 600.0f, 490.0f), resizable: false)
         {
+        }
+
+        public void Awake() {
             availableFonts = Font.GetOSInstalledFontNames();
             selectedFont = Array.IndexOf(availableFonts, MainWindow.Instance.Config.FontName);
         }

@@ -70,6 +70,10 @@ namespace ModTools.Explorer
         {
             try
             {
+                Plopper.Update();
+
+                if(!Visible) return;
+
                 var refChain = state.CurrentRefChain;
                 if (refChain?.Length > 0)
                 {
@@ -81,19 +85,21 @@ namespace ModTools.Explorer
                     Title = TitleBase;
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                Debug.LogException(ex);
                 ClearExpanded();
                 RefreshSceneRoots();
                 ClearHistory();
             }
 
-            Plopper.Update();
         }
 
         public new void OnGUI()
         {
             base.OnGUI();
+            if(!Visible)
+                return;
             MainWindow.Instance?.SceneExplorer?.RecalculateAreas();
         }
 
