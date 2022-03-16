@@ -121,17 +121,17 @@
                 // prevent double trigger by UUI when mouse is at the place window will be visible.
                 return;
             }
-            if (SettingsUI.ConsoleKey.IsKeyUp()) {
+            if (SettingsUI.ConsoleKey.KeyActivated()) {
                 ToggleConsole();
-            } else if (SettingsUI.MainWindowKey.IsKeyUp()) {
+            } else if (SettingsUI.MainWindowKey.KeyActivated()) {
                 ToggleMainWindow();
-            } else if (SettingsUI.SceneExplorerKey.IsKeyUp()) {
+            } else if (SettingsUI.SceneExplorerKey.KeyActivated()) {
                 ToggleSceneExplorer();
-            } else if (SettingsUI.DebugRendererKey.IsKeyUp()) {
+            } else if (SettingsUI.DebugRendererKey.KeyActivated()) {
                 ToggleDebugRenderer();
-            } else if (SettingsUI.WatchesKey.IsKeyUp()) {
+            } else if (SettingsUI.WatchesKey.KeyActivated()) {
                 ToggleWatches();
-            } else if (SettingsUI.ScriptEditorKey.IsKeyUp()) {
+            } else if (SettingsUI.ScriptEditorKey.KeyActivated()) {
                 ToggleScriptEditor();
             }
         }
