@@ -65,7 +65,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="UnifiedUILib" Version="2.2.7" />
+    <PackageReference Include="UnifiedUILib" Version="2.2.8" />
   </ItemGroup>
   <ItemGroup>
     <None Update="PreviewImage.png">
