@@ -110,7 +110,7 @@
             bool mouseOverAWindow = IsMouseOverAWindow();
             modalUI.Update(mouseOverAWindow, middleButtonState);
 
-            if (!LoadingExtension.Loaded || mouseOverAWindow /* workaround: when mouse is over a window UUI update is not exected. */) {
+            if (!LoadingExtension.Loaded || mouseOverAWindow || UIView.HasModalInput() /* workaround: when mouse is over a window UUI update is not expected. */) {
                 HandleHotKeys();
             }
         }
