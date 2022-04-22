@@ -143,13 +143,13 @@
             UUIHelpers.RegisterHotkeys(activationKey: SettingsUI.WatchesKey, onToggle: ToggleWatches);
             UUIHelpers.RegisterHotkeys(activationKey: SettingsUI.ScriptEditorKey, onToggle: ToggleScriptEditor);
 
-            Dictionary<SavedInputKey, Func<bool>> InDebugRendererKeys = new Dictionary<SavedInputKey, Func<bool>>();
-            InDebugRendererKeys[SettingsUI.IterateComponentKey] = InDebugRenderer;
-            InDebugRendererKeys[SettingsUI.ShowComponentKey] = InDebugRenderer;
+            Dictionary<SavedInputKey, Func<bool>> inDebugRendererKeys = new Dictionary<SavedInputKey, Func<bool>>();
+            inDebugRendererKeys[SettingsUI.IterateComponentKey] = DebugRendererIntoolHotkeysActive;
+            inDebugRendererKeys[SettingsUI.ShowComponentKey] = DebugRendererIntoolHotkeysActive;
             UUIHelpers.RegisterHotkeys(
                 activationKey: SettingsUI.DebugRendererKey,
                 onToggle: ToggleDebugRenderer,
-                activeKeys: InDebugRendererKeys);
+                activeKeys: inDebugRendererKeys);
         }
 
         private void ToggleConsole() {
@@ -175,6 +175,8 @@
         }
 
         private bool InDebugRenderer() => debugRenderer?.DrawDebugInfo ?? false;
+
+        private bool DebugRendererIntoolHotkeysActive() => InDebugRenderer() && debugRenderer.IntoolkeysActrive;
         #endregion HotKeys
 
         protected override void OnWindowDestroyed()
