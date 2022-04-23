@@ -75,7 +75,7 @@
                 return;
             }
 
-            if (SettingsUI.ShowComponentKey.IsKeyUp())
+            if (SettingsUI.ShowComponentKey.KeyActivated())
             {
                 var refChain = ReferenceChainBuilder.ForUIComponent(hoveredLocal);
 
@@ -88,7 +88,7 @@
                 }
             }
 
-            if (SettingsUI.IterateComponentKey.IsKeyUp() && hoveredComponents.Count > 1 && hoveredComponent != null)
+            if (SettingsUI.IterateComponentKey.KeyActivated() && hoveredComponents.Count > 1 && hoveredComponent != null)
             {
                 var index = hoveredComponents.IndexOf(hoveredComponent);
                 var newIndex = (index + hoveredComponents.Count + 1) % hoveredComponents.Count;
