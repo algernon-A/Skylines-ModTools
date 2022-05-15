@@ -29,7 +29,9 @@ namespace ModTools.Explorer
 
             Exception exceptionOnGetting = null;
 
-            if (property.CanRead && MainWindow.Instance.Config.EvaluateProperties || state.EvaluatedProperties.Contains(refChain.UniqueId))
+            bool autoEval = property.CanRead && !property.PropertyType.IsByRef && MainWindow.Instance.Config.EvaluateProperties;
+            bool shouldEvaluate = autoEval || state.EvaluatedProperties.Contains(refChain.UniqueId);
+            if (shouldEvaluate)
             {
                 try
                 {
@@ -92,7 +94,7 @@ namespace ModTools.Explorer
                 return;
             }
 
-            if (!MainWindow.Instance.Config.EvaluateProperties && !state.EvaluatedProperties.Contains(refChain.UniqueId))
+            if (!shouldEvaluate)
             {
                 GUI.enabled = true;
 
