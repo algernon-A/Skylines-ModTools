@@ -57,8 +57,8 @@
         }
 
         public static AccessModifier GetAccessmodifier(this PropertyInfo propertyInfo) {
-            var get = propertyInfo.GetGetMethod()?.GetAccessmodifier() ?? default;
-            var set = propertyInfo.GetSetMethod()?.GetAccessmodifier() ?? default;
+            var get = propertyInfo.GetGetMethod(true)?.GetAccessmodifier() ?? default;
+            var set = propertyInfo.GetSetMethod(true)?.GetAccessmodifier() ?? default;
             return Max(get, set);
         }
 
@@ -95,8 +95,8 @@
         }
 
         public static TypeModifier GetTypeModifier(this PropertyInfo propertyInfo) {
-            var get = propertyInfo.GetGetMethod()?.GetTypeModifier() ?? default;
-            var set = propertyInfo.GetSetMethod()?.GetTypeModifier() ?? default;
+            var get = propertyInfo.GetGetMethod(true)?.GetTypeModifier() ?? default;
+            var set = propertyInfo.GetSetMethod(true)?.GetTypeModifier() ?? default;
             var ret = Max(get, set);
             return ret;
         }
