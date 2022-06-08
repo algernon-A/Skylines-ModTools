@@ -50,20 +50,39 @@ namespace ModTools.Explorer
 
             GUI.contentColor = Color.white;
 
-            if (!property.CanWrite)
+            bool isReadOnly = !property.CanWrite;
+            if (isReadOnly)
             {
                 GUI.enabled = false;
             }
 
-            if (MainWindow.Instance.Config.ShowModifiers)
-            {
-                GUI.contentColor = MainWindow.Instance.Config.MemberTypeColor;
-                GUILayout.Label("property ");
+            if (MainWindow.Instance.Config.ShowModifiers) {
+                try {
+                    GUI.contentColor = MainWindow.Instance.Config.MemberTypeColor;
+                    GUILayout.Label("property ");
+                    {
+                        GUI.contentColor = MainWindow.Instance.Config.ModifierColor;
+                        string modifiers = property.GetAccessmodifier().ToString2();
+                        if (!string.IsNullOrEmpty(modifiers)) {
+                            GUILayout.Label(modifiers + " ");
+                        }
+                    }
 
-                if (!property.CanWrite)
-                {
-                    GUI.contentColor = MainWindow.Instance.Config.KeywordColor;
-                    GUILayout.Label("const ");
+                    {
+                        GUI.contentColor = MainWindow.Instance.Config.MemberTypeColor;
+                        string modifiers = property.GetTypeModifier().ToString2();
+                        if (isReadOnly) {
+                            modifiers = ModifierUtil.ConcatWithSpace(modifiers, "readonly");
+                        }
+
+                        if (!string.IsNullOrEmpty(modifiers)) {
+                            GUILayout.Label(modifiers + " ");
+                        }
+                    }
+                } catch (Exception ex) {
+                    Logger.Exception(ex);
+                    GUI.contentColor = MainWindow.Instance.Config.ModifierColor;
+                    GUILayout.Label(ex.GetType().Name + " ");
                 }
             }
 
@@ -148,7 +167,7 @@ namespace ModTools.Explorer
 
             GUIButtons.SetupCommonButtons(refChain, value, valueIndex: 0, smartType);
             object paste = null;
-            var doPaste = property.CanWrite;
+            var doPaste = !isReadOnly;
             if (doPaste)
             {
                 doPaste = GUIButtons.SetupPasteButon(property.PropertyType, value, out paste);

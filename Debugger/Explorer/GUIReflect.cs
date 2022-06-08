@@ -102,7 +102,7 @@ namespace ModTools.Explorer
                     {
                         var field = (FieldInfo)member.ReflectionInfo;
 
-                        if (field.IsLiteral && !field.IsInitOnly && !MainWindow.Instance.Config.ShowConsts)
+                        if (field.IsLiteral && !MainWindow.Instance.Config.ShowConsts)
                         {
                             continue;
                         }
