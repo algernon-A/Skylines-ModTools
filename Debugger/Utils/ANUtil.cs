@@ -3,13 +3,24 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Reflection;
     using System.Text;
     using UnityEngine;
 
     internal static class ANUtil {
         #region netman
-        internal static MonoBehaviour ANNetMan =>
-            GameObject.FindObjectOfType(Type.GetType("AdaptiveRoads.Manager.NetworkExtensionManager, AdaptiveRoads")) as MonoBehaviour;
+        internal static MonoBehaviour ANNetMan {
+            get {
+                var assembly = AppDomain.CurrentDomain.GetAssemblies()
+                    .FirstOrDefault(assembly => assembly.GetName().Name == "AdaptiveRoads");
+                var type = assembly?.GetType("AdaptiveRoads.Manager.NetworkExtensionManager", throwOnError: false);
+                if (type != null) {
+                    return GameObject.FindObjectOfType(type) as MonoBehaviour;
+                } else {
+                    return null;
+                }
+            }
+        }
 
         static object GetFieldValue(this object instance, string name) {
             return instance.GetType().GetField(name).GetValue(instance);

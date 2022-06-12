@@ -95,7 +95,7 @@ namespace ModTools.Explorer
             GUIMemberName.MemberName(property, nameHighlightFrom, nameHighlightLength);
 
             GUI.contentColor = Color.white;
-            GUILayout.Label(" = ");
+            GUILayout.Label(" => ");
             GUI.contentColor = MainWindow.Instance.Config.ValueColor;
             if (exceptionOnGetting != null)
             {
