@@ -113,7 +113,11 @@ namespace ModTools.Explorer
                         }
                         catch (Exception ex)
                         {
-                            SceneExplorerCommon.OnSceneTreeMessage(refChain, $"Exception when fetching field \"{field.Name}\" - {ex.Message}\n{ex.StackTrace}");
+                            if (SceneExplorer.FirstFrame) {
+                                Logger.Exception(ex);
+                            } else {
+                                SceneExplorerCommon.OnSceneTreeMessage(refChain, $"Exception when fetching field \"{field.Name}\" - {ex.Message}\n{ex.StackTrace}");
+                            }
                         }
 
                         break;
@@ -133,7 +137,11 @@ namespace ModTools.Explorer
                         }
                         catch (Exception ex)
                         {
-                            SceneExplorerCommon.OnSceneTreeMessage(refChain, $"Exception when fetching property \"{property.Name}\" - {ex.Message}\n{ex.StackTrace}");
+                            if (SceneExplorer.FirstFrame) {
+                                Logger.Exception(ex);
+                            } else {
+                                SceneExplorerCommon.OnSceneTreeMessage(refChain, $"Exception when fetching property \"{property.Name}\" - {ex.Message}\n{ex.StackTrace}");
+                            }
                         }
 
                         break;
@@ -149,7 +157,11 @@ namespace ModTools.Explorer
                         }
                         catch (Exception ex)
                         {
-                            SceneExplorerCommon.OnSceneTreeMessage(refChain, $"Exception when fetching method \"{method.Name}\" - {ex.Message}");
+                            if (SceneExplorer.FirstFrame) {
+                                Logger.Exception(ex);
+                            } else {
+                                SceneExplorerCommon.OnSceneTreeMessage(refChain, $"Exception when fetching method \"{method.Name}\" - {ex.Message}");
+                            }
                         }
 
                         break;

@@ -496,17 +496,23 @@ namespace ModTools.Explorer
 
             state.PreventCircularReferences.Clear();
 
-            lock (ShowRequests)
-            {
-                while (ShowRequests.Count > 0)
-                {
-                    ProcessShowRequest(ShowRequests.Dequeue());
+            if (Event.current.type == EventType.Layout) {
+                FirstFrame = false;
+                lock (ShowRequests) {
+                    while (ShowRequests.Count > 0) {
+                        ProcessShowRequest(ShowRequests.Dequeue());
+                        FirstFrame = true;
+                    }
                 }
             }
 
-            DrawHeader();
-            DrawSceneTree();
-            DrawComponent();
+            try {
+                DrawHeader();
+                DrawSceneTree();
+                DrawComponent();
+            } catch(Exception ex) {
+                Logger.Exception(ex);
+            }
         }
 
         private static void EnqueueShowRefChainRequest(List<ReferenceChain> refChains, bool hideUnrelatedSceneRoots, string updatedSearchString, bool addChainToHistory)
@@ -519,6 +525,8 @@ namespace ModTools.Explorer
                 AddChainToHistory = addChainToHistory,
             });
         }
+
+        public static bool FirstFrame { get; private set; }
 
         private void ProcessShowRequest(ShowRequest request)
         {
