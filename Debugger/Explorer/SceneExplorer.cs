@@ -501,7 +501,9 @@ namespace ModTools.Explorer
                 lock (ShowRequests) {
                     while (ShowRequests.Count > 0) {
                         ProcessShowRequest(ShowRequests.Dequeue());
-                        FirstFrame = true;
+                        if (MainWindow.Instance.Config.EvaluateProperties) {
+                            FirstFrame = true;
+                        }
                     }
                 }
             }
@@ -526,6 +528,9 @@ namespace ModTools.Explorer
             });
         }
 
+        /// <summary>
+        /// avoid exceptions on the first frame when auto-evaluate properties are on.
+        /// </summary>
         public static bool FirstFrame { get; private set; }
 
         private void ProcessShowRequest(ShowRequest request)

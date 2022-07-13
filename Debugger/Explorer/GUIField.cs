@@ -37,6 +37,10 @@ namespace ModTools.Explorer
                 Debug.LogException(e);
             }
 
+            if (SceneExplorer.FirstFrame) {
+                return; // avoid exceptions (cached values might change after fist call to GetValue() of a property)
+            }
+
             if (value != null)
             {
                 GUIExpander.ExpanderControls(state, refChain, field.FieldType);
@@ -50,7 +54,7 @@ namespace ModTools.Explorer
             if (MainWindow.Instance.Config.ShowModifiers) {
                 try {
                     GUI.contentColor = MainWindow.Instance.Config.MemberTypeColor;
-                    GUILayout.Label("field ");
+                    //GUILayout.Label("field ");
 
                     {
                         GUI.contentColor = MainWindow.Instance.Config.ModifierColor;
@@ -98,6 +102,7 @@ namespace ModTools.Explorer
                     var newValue = GUIControls.EditorValueField(refChain.UniqueId, field.FieldType, value);
                     if (!newValue.Equals(value))
                     {
+                        UnityEngine.Debug.Log($"setting '{obj}'.'{field}' to '{value}' ...");
                         refChain.SetValue(obj, field, newValue);
                     }
                 }

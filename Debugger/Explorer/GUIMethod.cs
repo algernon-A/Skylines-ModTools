@@ -27,7 +27,7 @@ namespace ModTools.Explorer
             if (MainWindow.Instance.Config.ShowModifiers) {
                 try {
                     GUI.contentColor = MainWindow.Instance.Config.MemberTypeColor;
-                    GUILayout.Label("method ");
+                    //GUILayout.Label("method ");
 
                     {
                         GUI.contentColor = MainWindow.Instance.Config.ModifierColor;

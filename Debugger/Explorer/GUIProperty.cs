@@ -48,6 +48,10 @@ namespace ModTools.Explorer
                 }
             }
 
+            if (SceneExplorer.FirstFrame) {
+                return; // avoid exceptions (cached values might change after fist call to GetValue() of a property)
+            }
+
             GUI.contentColor = Color.white;
 
             bool isReadOnly = !property.CanWrite;
@@ -59,7 +63,7 @@ namespace ModTools.Explorer
             if (MainWindow.Instance.Config.ShowModifiers) {
                 try {
                     GUI.contentColor = MainWindow.Instance.Config.MemberTypeColor;
-                    GUILayout.Label("property ");
+                    //GUILayout.Label("property ");
                     {
                         GUI.contentColor = MainWindow.Instance.Config.ModifierColor;
                         string modifiers = property.GetAccessmodifier().ToString2();
@@ -142,6 +146,7 @@ namespace ModTools.Explorer
                     var newValue = GUIControls.EditorValueField(refChain.UniqueId, property.PropertyType, value);
                     if (!newValue.Equals(value))
                     {
+                        UnityEngine.Debug.Log($"setting '{obj}'.'{property}' to '{value}' ...");
                         refChain.SetValue(obj, property, newValue);
                     }
                 }
