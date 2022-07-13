@@ -1,6 +1,7 @@
 ﻿using ModTools.Utils;
 using ObjUnity3D;
 using System;
+using System.Collections;
 using System.Reflection;
 using UnityEngine;
 
@@ -37,18 +38,18 @@ namespace ModTools.Explorer {
                     return;
                 }
 
-                if (TypeUtil.IsList(obj)) {
-                    GUIList.OnSceneTreeReflectIList(state, refChain, obj, smartType);
+                if (obj is IList list) {
+                    GUIList.OnSceneTreeReflectIList(state, refChain, list, smartType);
                     return;
                 }
 
-                if (TypeUtil.IsCollection(obj)) {
-                    GUICollection.OnSceneTreeReflectICollection(state, refChain, obj, smartType);
+                if (obj is ICollection collection) {
+                    GUICollection.OnSceneTreeReflectICollection(state, refChain, collection, smartType);
                     return;
                 }
 
-                if (TypeUtil.IsEnumerable(obj)) {
-                    GUIEnumerable.OnSceneTreeReflectIEnumerable(state, refChain, obj, smartType);
+                if (obj is IEnumerable enumerable) {
+                    GUIEnumerable.OnSceneTreeReflectIEnumerable(state, refChain, enumerable, smartType);
                     return;
                 }
 

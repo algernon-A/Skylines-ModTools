@@ -8,14 +8,9 @@ namespace ModTools.Explorer
 {
     internal static class GUIList
     {
-        public static void OnSceneTreeReflectIList(SceneExplorerState state, ReferenceChain refChain, object myProperty, TypeUtil.SmartType elementSmartType = TypeUtil.SmartType.Undefined)
+        public static void OnSceneTreeReflectIList(SceneExplorerState state, ReferenceChain refChain, IList list, TypeUtil.SmartType elementSmartType = TypeUtil.SmartType.Undefined)
         {
             if (!SceneExplorerCommon.SceneTreeCheckDepth(refChain))
-            {
-                return;
-            }
-
-            if (!(myProperty is IList list))
             {
                 return;
             }

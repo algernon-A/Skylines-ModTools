@@ -76,12 +76,6 @@ namespace ModTools.Utils
 
         public static void ClearTypeCache() => typeCache = new Dictionary<Type, ExtendedMemberInfo[]>();
 
-        public static bool IsEnumerable(object myProperty)
-        {
-            return typeof(IEnumerable).IsInstanceOfType(myProperty)
-                || typeof(IEnumerable<>).IsInstanceOfType(myProperty);
-        }
-
         public static bool IsCollection(object myProperty)
         {
             return typeof(ICollection).IsAssignableFrom(myProperty.GetType())

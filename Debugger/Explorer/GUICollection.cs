@@ -8,14 +8,9 @@ namespace ModTools.Explorer
 {
     internal static class GUICollection
     {
-        public static void OnSceneTreeReflectICollection(SceneExplorerState state, ReferenceChain refChain, object myProperty, TypeUtil.SmartType elementSmartType = TypeUtil.SmartType.Undefined)
+        public static void OnSceneTreeReflectICollection(SceneExplorerState state, ReferenceChain refChain, ICollection collection, TypeUtil.SmartType elementSmartType = TypeUtil.SmartType.Undefined)
         {
             if (!SceneExplorerCommon.SceneTreeCheckDepth(refChain))
-            {
-                return;
-            }
-
-            if (!(myProperty is ICollection collection))
             {
                 return;
             }
