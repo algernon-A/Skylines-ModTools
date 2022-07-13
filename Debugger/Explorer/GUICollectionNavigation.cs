@@ -11,56 +11,56 @@ namespace ModTools.Explorer
             ReferenceChain refChain,
             ReferenceChain oldRefChain,
             int collectionSize,
-            out uint arrayStart,
-            out uint arrayEnd)
+            out uint startIndex,
+            out uint endIndex)
         {
             GUILayout.BeginHorizontal();
             SceneExplorerCommon.InsertIndent(refChain.Indentation);
 
             GUILayout.Label($"{collectionLabel} size: {collectionSize}");
 
-            if (!state.SelectedArrayStartIndices.TryGetValue(refChain.UniqueId, out arrayStart))
+            if (!state.SelectedArrayStartIndices.TryGetValue(refChain.UniqueId, out startIndex))
             {
                 state.SelectedArrayStartIndices.Add(refChain.UniqueId, 0);
             }
 
-            if (!state.SelectedArrayEndIndices.TryGetValue(refChain.UniqueId, out arrayEnd))
+            if (!state.SelectedArrayEndIndices.TryGetValue(refChain.UniqueId, out endIndex))
             {
                 state.SelectedArrayEndIndices.Add(refChain.UniqueId, 32);
-                arrayEnd = 32;
+                endIndex = 32;
             }
 
-            arrayStart = GUIControls.NumericValueField($"{oldRefChain}.arrayStart", "Start index", arrayStart);
-            arrayEnd = GUIControls.NumericValueField($"{oldRefChain}.arrayEnd", "End index", arrayEnd);
+            startIndex = GUIControls.NumericValueField($"{oldRefChain}.arrayStart", "Start index", startIndex);
+            endIndex = GUIControls.NumericValueField($"{oldRefChain}.arrayEnd", "End index", endIndex);
             GUILayout.Label("(32 items max)");
-            var pageSize = (uint)Mathf.Clamp(arrayEnd - arrayStart + 1, 1, Mathf.Min(32, collectionSize - arrayStart, arrayEnd + 1));
+            var pageSize = (uint)Mathf.Clamp(endIndex - startIndex + 1, 1, Mathf.Min(32, collectionSize - startIndex, endIndex + 1));
             if (GUILayout.Button("◄", GUILayout.ExpandWidth(false)))
             {
-                arrayStart -= pageSize;
-                arrayEnd -= pageSize;
+                startIndex -= pageSize;
+                endIndex -= pageSize;
             }
 
             if (GUILayout.Button("►", GUILayout.ExpandWidth(false)))
             {
-                arrayStart += pageSize;
-                arrayEnd += pageSize;
+                startIndex += pageSize;
+                endIndex += pageSize;
             }
 
-            arrayStart = (uint)Mathf.Clamp(arrayStart, 0, collectionSize - pageSize);
-            arrayEnd = (uint)Mathf.Max(0, Mathf.Clamp(arrayEnd, pageSize - 1, collectionSize - 1));
-            if (arrayStart > arrayEnd)
+            startIndex = (uint)Mathf.Clamp(startIndex, 0, collectionSize - pageSize);
+            endIndex = (uint)Mathf.Max(0, Mathf.Clamp(endIndex, pageSize - 1, collectionSize - 1));
+            if (startIndex > endIndex)
             {
-                arrayEnd = arrayStart;
+                endIndex = startIndex;
             }
 
-            if (arrayEnd - arrayStart > 32)
+            if (endIndex - startIndex > 32)
             {
-                arrayEnd = arrayStart + 32;
-                arrayEnd = (uint)Mathf.Max(0, Mathf.Clamp(arrayEnd, 32, collectionSize - 1));
+                endIndex = startIndex + 32;
+                endIndex = (uint)Mathf.Max(0, Mathf.Clamp(endIndex, 32, collectionSize - 1));
             }
 
-            state.SelectedArrayStartIndices[refChain.UniqueId] = arrayStart;
-            state.SelectedArrayEndIndices[refChain.UniqueId] = arrayEnd;
+            state.SelectedArrayStartIndices[refChain.UniqueId] = startIndex;
+            state.SelectedArrayEndIndices[refChain.UniqueId] = endIndex;
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
         }
