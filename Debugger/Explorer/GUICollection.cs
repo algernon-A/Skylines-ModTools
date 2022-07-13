@@ -32,7 +32,7 @@ namespace ModTools.Explorer
             var flagsField = collectionItemType?.GetField("m_flags");
             var flagIsEnum = flagsField?.FieldType.IsEnum == true && Type.GetTypeCode(flagsField.FieldType) == TypeCode.Int32;
 
-            GUICollectionNavigation.SetUpCollectionNavigation("Collection", state, refChain, oldRefChain, collectionSize, out var arrayStart, out var arrayEnd);
+            GUICollectionNavigation.SetUpCollectionNavigation("Collection", state, refChain, oldRefChain, (uint)collectionSize, out var arrayStart, out var arrayEnd);
             uint count = 0;
             foreach (var value in collection)
             {
