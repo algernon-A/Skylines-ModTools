@@ -47,12 +47,10 @@ namespace ModTools.Explorer
                 GUILayout.BeginHorizontal(GUIWindow.HighlightStyle);
                 SceneExplorerCommon.InsertIndent(refChain.Indentation);
 
-                var isNullOrEmpty = value == null || flagIsEnum && Convert.ToInt32(flagsField.GetValue(value)) == 0;
-
                 var type = value?.GetType() ?? collectionItemType;
                 if (type != null)
                 {
-                    if (!isNullOrEmpty)
+                    if (value != null)
                     {
                         GUIExpander.ExpanderControls(state, refChain, type);
                     }
@@ -71,25 +69,21 @@ namespace ModTools.Explorer
                 GUILayout.Label(" = ");
 
                 GUI.contentColor = MainWindow.Instance.Config.ValueColor;
-                GUILayout.Label(value == null ? "null" : isNullOrEmpty ? "empty" : value.ToString());
+                GUILayout.Label(value?.ToString() ?? "null");
 
                 GUI.contentColor = Color.white;
 
                 GUILayout.FlexibleSpace();
 
-                if (!isNullOrEmpty)
-                {
-                    GUIButtons.SetupCommonButtons(refChain, value, count, elementSmartType);
-                }
-
                 if (value != null)
                 {
+                    GUIButtons.SetupCommonButtons(refChain, value, count, elementSmartType);
                     GUIButtons.SetupJumpButton(value, refChain);
                 }
 
                 GUILayout.EndHorizontal();
 
-                if (!isNullOrEmpty && !TypeUtil.IsSpecialType(type) && state.ExpandedObjects.Contains(refChain.UniqueId))
+                if (value != null && !TypeUtil.IsSpecialType(type) && state.ExpandedObjects.Contains(refChain.UniqueId))
                 {
                     GUIReflect.OnSceneTreeReflect(state, refChain, value, false);
                 }
