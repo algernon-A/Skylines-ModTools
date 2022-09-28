@@ -617,7 +617,7 @@ namespace ModTools.Explorer
                         case ReferenceChain.ReferenceType.EnumerableItem:
                             var index = (uint)refChain.GetChainItem(i);
                             uint startIndex;
-                            if (state.SelectedArrayStartIndices.TryGetValue(expandedRefChain.UniqueId,out startIndex)) {
+                            if (state.SelectedArrayStartIndices.TryGetValue(expandedRefChain.UniqueId, out startIndex)) {
                                 startIndex = Math.Min(index, startIndex);
                             } else if (index > 16) {
                                     startIndex = index - 16;

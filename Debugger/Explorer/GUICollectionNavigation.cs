@@ -33,7 +33,13 @@ namespace ModTools.Explorer {
                 0u);
             endIndex = state.SelectedArrayEndIndices.GetOrAdd(
                 refChain.UniqueId,
-                Math.Min(MAX_PAGE_SIZE -1, collectionSize - 1));
+                Math.Min(MAX_PAGE_SIZE - 1, collectionSize - 1));
+
+            if (endIndex >= collectionSize) {
+                // if user press back/up, scene explorer will try to auto open collection before it knows list count.
+                // therefore it can set end index too large. here we fix that:
+                endIndex = state.SelectedArrayEndIndices[refChain.UniqueId] = collectionSize - 1;
+            }
 
             uint startIndex2 = GUIControls.NumericValueField($"{oldRefChain}.arrayStart", "Start index", startIndex);
             uint endIndex2 = GUIControls.NumericValueField($"{oldRefChain}.arrayEnd", "End index", endIndex);

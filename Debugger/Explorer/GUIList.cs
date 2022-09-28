@@ -40,7 +40,13 @@ namespace ModTools.Explorer
 
                 GUI.contentColor = Color.white;
 
-                var value = list[(int)i];
+                object value = null;
+                try {
+                    value = list[(int)i];
+                } catch (IndexOutOfRangeException ex) {
+                    Logger.Error($"list.Count={list.Count} index={i} collectionSize={collectionSize} arrayEnd={arrayEnd}\n" + ex);
+                }
+
                 var type = value?.GetType() ?? listItemType;
                 if (type != null)
                 {
