@@ -1,5 +1,7 @@
 namespace ModTools.Utils
 {
+    using EManagersLib.API;
+
     internal static class InstanceUtil
     {
         public static string GetLineName(this InstanceID instanceId)
@@ -70,13 +72,7 @@ namespace ModTools.Utils
 
         public static string GetPropAssetName(this InstanceID instanceId)
         {
-            var id = instanceId.Prop;
-            if (id != 0)
-            {
-                return PropManager.instance.m_props.m_buffer[id].Info?.name ?? "N/A";
-            }
-
-            return "N/A";
+            return PropAPI.Wrapper.GetInfo(instanceId)?.name ?? "N/A";
         }
 
         public static string GetTreeAssetName(this InstanceID instanceId)

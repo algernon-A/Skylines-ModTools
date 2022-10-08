@@ -1,5 +1,6 @@
 using System.Reflection;
 using ColossalFramework.UI;
+using EManagersLib.API;
 using ModTools.Explorer;
 using UnityEngine;
 
@@ -173,6 +174,16 @@ namespace ModTools.Utils
                 .Add(typeof(PropManager).GetField("m_props"))
                 .Add(typeof(Array16<PropInstance>).GetField("m_buffer"))
                 .Add(propId);
+        }
+
+        public static ReferenceChain ForEProp(InstanceID instance)
+        {
+            return new ReferenceChain()
+                .Add(EManagersLibWrapper.instance.gameObject)
+                .Add(EManagersLibWrapper.instance)
+                .Add(typeof(EManagersLibWrapper).GetProperty(nameof(EManagersLibWrapper.Wrapper)))
+                .Add(typeof(EMLPropWrapper).GetField(nameof(EMLPropWrapper.m_defBuffer)))
+                .Add(instance.GetProp32());
         }
 
         public static ReferenceChain ForTree(uint treeId)

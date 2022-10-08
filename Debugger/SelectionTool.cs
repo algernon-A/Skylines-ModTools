@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using ColossalFramework;
 using ColossalFramework.UI;
+using EManagersLib.API;
 using ModTools.Explorer;
 using ModTools.Utils;
 using UnityEngine;
@@ -83,6 +84,12 @@ namespace ModTools
             bar_.zOrder = 18;
             bar_.spriteName = "SelectionToolBar";
             bar_.Hide();
+
+            PropAPI.Initialize();
+            if (PropAPI.m_isEMLInstalled)
+            {
+                EManagersLibWrapper.Ensure();
+            }
 
             button_ = UUIHelpers.RegisterToolButton(
                 name: "ModTools Selection tool",
@@ -267,7 +274,14 @@ namespace ModTools
                 }
                 else if (m_hoverInstance.Prop > 0)
                 {
-                    sceneExplorer.Show(ReferenceChainBuilder.ForProp(m_hoverInstance.Prop));
+                    if (PropAPI.m_isEMLInstalled)
+                    {
+                        sceneExplorer.Show(ReferenceChainBuilder.ForEProp(m_hoverInstance));
+                    }
+                    else
+                    {
+                        sceneExplorer.Show(ReferenceChainBuilder.ForProp(m_hoverInstance.Prop));
+                    }
                 }
                 else if (m_hoverInstance.CitizenInstance > 0)
                 {
